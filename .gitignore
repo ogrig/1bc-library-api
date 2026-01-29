@@ -1,0 +1,20 @@
+# Build outputs
+bin/
+obj/
+
+# Test results
+TestResults/
+
+# Visual Studio / VS Code
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# OS
+Thumbs.db
+Desktop.ini
