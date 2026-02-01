@@ -1,6 +1,56 @@
+# LibraryAPI – Books API (requires X-API-Key; default in Development: DefaultApiKey123)
 @LibraryAPI_HostAddress = http://localhost:5250
+@ApiKey = DefaultApiKey123
 
-GET {{LibraryAPI_HostAddress}}/weatherforecast/
+### GET all books
+GET {{LibraryAPI_HostAddress}}/Books
+X-API-Key: {{ApiKey}}
 Accept: application/json
 
 ###
+
+### GET book by id
+GET {{LibraryAPI_HostAddress}}/Books/1
+X-API-Key: {{ApiKey}}
+Accept: application/json
+
+###
+
+### POST new book
+POST {{LibraryAPI_HostAddress}}/Books
+X-API-Key: {{ApiKey}}
+Content-Type: application/json
+
+{
+  "title": "New Book",
+  "author": "Author Name",
+  "isbn": "978-0-00-000000-0",
+  "publishedDate": "2026-01-01",
+  "owner": "Owner Name",
+  "status": "available",
+  "borrower": ""
+}
+
+###
+
+### PUT update book
+PUT {{LibraryAPI_HostAddress}}/Books/1
+X-API-Key: {{ApiKey}}
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "Updated Title",
+  "author": "Author Name",
+  "isbn": "978-0-00-000000-0",
+  "publishedDate": "2026-01-01",
+  "owner": "Owner Name",
+  "status": "available",
+  "borrower": ""
+}
+
+###
+
+### DELETE book
+DELETE {{LibraryAPI_HostAddress}}/Books/1
+X-API-Key: {{ApiKey}}
