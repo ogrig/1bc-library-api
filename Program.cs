@@ -10,16 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// Configure ApiKey options from configuration (section "LibraryApi").
+// Configure ApiKey options for the named "ApiKey" scheme from configuration (section "LibraryApi").
 // This allows using env var `LibraryApi__ApiKey`, user-secrets, or a secret store.
-builder.Services.Configure<ApiKeyAuthenticationOptions>(
+builder.Services.Configure<ApiKeyAuthenticationOptions>("ApiKey",
     builder.Configuration.GetSection("LibraryApi"));
 
 builder.Services
     .AddAuthentication("ApiKey")
     .AddScheme<ApiKeyAuthenticationOptions, ApiKeyAuthenticationHandler>(
         "ApiKey",
-        options => builder.Configuration.GetSection("LibraryApi").Bind(options));
+        options => { /* named options configured via Configure<ApiKeyAuthenticationOptions>("ApiKey", ...) */ });
 
 builder.Services.AddAuthorization();
 
