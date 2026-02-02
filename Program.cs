@@ -10,12 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-// Add API Key Authentication
+// Configure ApiKey options from configuration (section "LibraryApi").
+// This allows using env var `LibraryApi__ApiKey`, user-secrets, or a secret store.
+builder.Services.Configure<ApiKeyAuthenticationOptions>(
+    builder.Configuration.GetSection("LibraryApi"));
+
 builder.Services
     .AddAuthentication("ApiKey")
     .AddScheme<ApiKeyAuthenticationOptions, ApiKeyAuthenticationHandler>(
         "ApiKey",
-        options => options.ApiKey = builder.Configuration["ApiKey"] ?? "DefaultApiKey123");
+        options => builder.Configuration.GetSection("LibraryApi").Bind(options));
 
 builder.Services.AddAuthorization();
 
@@ -37,6 +41,13 @@ builder.Services.AddDbContext<BookContext>(opt =>
     opt.UseInMemoryDatabase("BookList"));
 
 var app = builder.Build();
+
+// Fail fast if API key is not configured
+var configuredApiKey = app.Configuration["LibraryApi:ApiKey"];
+if (string.IsNullOrWhiteSpace(configuredApiKey))
+{
+    throw new InvalidOperationException("API key not configured. Set LibraryApi:ApiKey via environment variable or user-secrets.");
+}
 
 app.UseCors();
 
