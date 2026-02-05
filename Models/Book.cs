@@ -8,6 +8,6 @@ public class Book
     public string Isbn { get; set; } = string.Empty;
     public string PublishedDate { get; set; } = string.Empty;
     public string Owner { get; set; } = string.Empty;
-    public string Status { get; set; } = string.Empty;
+    public string Status { get; set; } = "available";
     public string Borrower { get; set; } = string.Empty;
 }
