@@ -12,24 +12,5 @@ public class BookSeedDataTests
         Assert.Equal(10, books.Count);
         Assert.Equal(10, books.Select(b => b.Id).Distinct().Count());
     }
-
-    [Fact]
-    public void GetBooks_BorrowerMatchesStatusConvention()
-    {
-        var books = BookSeedData.GetBooks();
-
-        foreach (var b in books)
-        {
-            if (string.Equals(b.Status, "borrowed", StringComparison.OrdinalIgnoreCase))
-            {
-                Assert.False(string.IsNullOrWhiteSpace(b.Borrower));
-            }
-
-            if (string.Equals(b.Status, "available", StringComparison.OrdinalIgnoreCase))
-            {
-                Assert.True(string.IsNullOrWhiteSpace(b.Borrower));
-            }
-        }
-    }
 }
 

@@ -40,7 +40,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddDbContext<BookContext>(opt =>
-    opt.UseInMemoryDatabase("BookList"));
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
@@ -52,17 +52,6 @@ if (string.IsNullOrWhiteSpace(configuredApiKey))
 }
 
 app.UseCors();
-
-// Seed the database with sample data
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<BookContext>();
-    if (!context.Books.Any())
-    {
-        context.Books.AddRange(BookSeedData.GetBooks());
-        context.SaveChanges();
-    };
-}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

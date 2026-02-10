@@ -27,7 +27,6 @@ Content-Type: application/json
   "isbn": "978-0-00-000000-0",
   "publishedDate": "2026-01-01",
   "owner": "Owner Name",
-  "status": "available",
   "borrower": ""
 }
 
@@ -45,8 +44,7 @@ Content-Type: application/json
   "isbn": "978-0-00-000000-0",
   "publishedDate": "2026-01-01",
   "owner": "Owner Name",
-  "status": "available",
-  "borrower": ""
+  "borrower": "Johny"
 }
 
 ###

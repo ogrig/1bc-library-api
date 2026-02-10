@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using LibraryAPI.Models;
 using FluentValidation;
-using LibraryAPI.Validators;
+using Microsoft.AspNetCore.Identity;
 
 namespace LibraryAPI.Controllers
 {
@@ -23,7 +23,7 @@ namespace LibraryAPI.Controllers
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
     {
-      return await _context.Books.ToListAsync();
+      return await _context.Books.OrderBy(book => book.Title).ToListAsync();
     }
 
     // GET: Books/5
@@ -50,20 +50,21 @@ namespace LibraryAPI.Controllers
         return BadRequest();
       }
 
-      _context.Entry(book).State = EntityState.Modified;
+      if (!TryGetBook(id, out var theBook))
+      {
+        return NotFound();
+      }
 
       try
       {
+        _context.Books.Attach(book);
+        _context.Entry(book).Property(b => b.Borrower).IsModified = true;
         await _context.SaveChangesAsync();
       }
       catch (DbUpdateConcurrencyException)
       {
-        if (!BookExists(id))
-        {
-          return NotFound();
-        }
-
-        throw;
+        return StatusCode(StatusCodes.Status412PreconditionFailed,
+                "Record was modified by another request.");
       }
 
       return NoContent();
@@ -103,9 +104,11 @@ namespace LibraryAPI.Controllers
       return NoContent();
     }
 
-    private bool BookExists(long id)
+    private bool TryGetBook(long id, out Book? theBook)
     {
-      return _context.Books.Any(e => e.Id == id);
+      theBook = _context.Books.AsNoTracking<Book>().SingleOrDefault(book => book.Id == id);
+
+      return theBook != null;
     }
   }
 }

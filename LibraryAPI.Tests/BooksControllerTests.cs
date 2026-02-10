@@ -2,6 +2,7 @@ using LibraryAPI.Controllers;
 using LibraryAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using LibraryAPI.Validators;
 
 namespace LibraryAPI.Tests;
 
@@ -49,13 +50,13 @@ public class BooksControllerTests
             Title = "New Book",
             Author = "Author",
             Isbn = "ISBN",
-            PublishedDate = "2026-01-01",
+            PublishedDate = DateOnly.Parse("2026 -01-01"),
             Owner = "Owner",
-            Status = "available",
             Borrower = ""
         };
 
-        var result = await controller.PostBooks(book);
+        var validator = new BookValidator();
+        var result = await controller.PostBooks(book, validator);
 
         var created = Assert.IsType<CreatedAtActionResult>(result.Result);
         Assert.Equal(nameof(BooksController.GetBook), created.ActionName);

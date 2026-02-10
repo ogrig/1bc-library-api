@@ -29,18 +29,7 @@ namespace LibraryAPI.Validators
             .WithMessage("ISBN is required.");
       RuleFor(book => book.PublishedDate)
           .NotEmpty()
-            .WithMessage("Published Date is required.")
-          .Must(date => DateTime.TryParse(date, out var parsedDate))
-            .WithMessage("Published date is not a proper date.")
-          .Must(date => DateTime.TryParse(date, out var parsedDate) && parsedDate <= DateTime.Today)
-            .WithMessage("Published date cannot be in the future.");
-      RuleFor(book => book.Status)
-          .NotEmpty()
-            .WithMessage("Status is required.")
-          .Must(IsValidStatus)
-            .WithMessage($"Status must be either {string.Join(", ", validStatuses)}.")
-          .Must((book, status) => IsBorrowrValidForStatus(status, book.Borrower))
-            .WithMessage(book => invalidStatusBorrowerMessages[book.Status]);
+            .WithMessage("Published Date is required.");
     }
 
     private bool IsValidStatus(string status)
