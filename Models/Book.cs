@@ -5,8 +5,6 @@ namespace LibraryAPI.Models;
 [Table("books")]
 public class Book
 {
-  // public string Status { get; set; } = "available";
-
   [Column("id")]
   public long Id { get; set; }
 
